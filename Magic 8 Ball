@@ -4,14 +4,15 @@ import json
 import tkinter as tk
 from tkinter import *
 
+# Main Window config
 root = tk.Tk()
 root.geometry('700x700')
 root.resizable(width=False, height=False)
 root.title('Magic 8 Ball')
 root.configure(bg="black")
-
 root.bind('<Return>', lambda event=None: button.invoke())
 
+# variables that change
 var = tk.StringVar()
 var.set("what is your name")
 
@@ -21,6 +22,7 @@ processing_var.set("")
 answer_var = tk.StringVar()
 answer_var.set("")
 
+# Frames for label, entry, and botton placement
 upper_frame = tk.Frame(root)
 upper_frame.place(relx=0.5, rely=0.01, relwidth=0.75, relheight=0.06, anchor="n")
 
@@ -30,7 +32,7 @@ mid_frame.place(relx=0.5, rely=0.78, relwidth=0.75, relheight=0.065, anchor="n")
 lower_frame = tk.Frame(root, bg="black", bd=0.5)
 lower_frame.place(relx=0.5, rely=0.85, relwidth=0.75, relheight=0.065, anchor="n")
 
-
+# Labels, Entry, button
 title_label = tk.Label(upper_frame, text="You have woken the magic 8 ball and its infinite wisdom, Ask me anything!",
                        font=50, bg="black", fg="#19cc19")
 title_label.place(relwidth=1, relheight=1)
@@ -38,21 +40,21 @@ title_label.place(relwidth=1, relheight=1)
 label = tk.Label(mid_frame, textvariable=var, fg="#19cc19", bg="black", font=50)
 label.place(relwidth=1, relheight=1)
 
-entry = tk.Entry(lower_frame, bg="black", fg="#19cc19", font=40)
-entry.place(relx=0.0, rely=0.1, relwidth=0.685, relheight=0.85)
-
 answer_label = tk.Label(textvariable=answer_var, fg="#19cc19", bg="black", font=65)
 answer_label.place(rely=0.275, relwidth=1, relheight=0.075)
 
 processing_label = tk.Label(textvariable=processing_var, fg="#19cc19", bg="black", font=50, anchor="w")
 processing_label.place(relx=0.15, rely=0.7, relwidth=0.2, relheight=0.08)
 
+entry = tk.Entry(lower_frame, bg="black", fg="#19cc19", font=40)
+entry.place(relx=0.0, rely=0.1, relwidth=0.685, relheight=0.85)
+
 button = tk.Button(lower_frame, text="Enter", bg="grey", font=50, command=lambda: [UserName(name=entry.get(),
                                                     question=entry.get(), continue_or_not=entry.get()), del_entry()])
 button.place(relx=0.7, rely=0.1, relwidth=0.3, relheight=0.85)
 
 
-
+# JSON file load  and check box config for corruption
 with open('Responses', 'r') as res:
     res_contents = json.load(res)
 corrupted = IntVar()
@@ -60,16 +62,16 @@ check_box = Checkbutton(root, text="Corrupted Ball", bg="black", fg="#19cc19", f
 check_box.place(relx=0.6, rely=0.92, relwidth=0.3, relheight=0.03)
 
 
+
+ 
 class UserInput(object):
     def __init__(self, name, question, continue_or_not):
         self.name = name
         self.question = question
         self.continue_or_not = continue_or_not
-
-
-
-
-
+        
+        
+        
 class UserName(UserInput):
     def __init__(self, name, question, continue_or_not):
         super().__init__(name, question, continue_or_not)
@@ -174,9 +176,7 @@ def answer():
 class UserContinue(UserInput):
     def __init__(self, name, question, continue_or_not):
         super().__init__(name, question, continue_or_not)
-        print(continue_or_not)
-
-
+        
         if self.continue_or_not == "yes" or self.continue_or_not == "Yes":
             var.set("What is your next question?")
             button_change()
@@ -220,6 +220,10 @@ class UserContinue2(UserInput):
             pass
 
 
+
+
+
+# Functions for clearing the entry box and changing the button config
 def del_entry():
     entry.delete(0, END)
 
