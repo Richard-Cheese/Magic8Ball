@@ -1,0 +1,269 @@
+# Imports
+import random
+import json
+import tkinter as tk
+from tkinter import *
+
+root = tk.Tk()
+root.geometry('700x700')
+root.resizable(width=False, height=False)
+root.title('Magic 8 Ball')
+root.configure(bg="black")
+
+root.bind('<Return>', lambda event=None: button.invoke())
+
+var = tk.StringVar()
+var.set("what is your name")
+
+processing_var = tk.StringVar()
+processing_var.set("")
+
+answer_var = tk.StringVar()
+answer_var.set("")
+
+upper_frame = tk.Frame(root)
+upper_frame.place(relx=0.5, rely=0.01, relwidth=0.75, relheight=0.06, anchor="n")
+
+mid_frame = tk.Frame(root, bg="black", bd=1.5)
+mid_frame.place(relx=0.5, rely=0.78, relwidth=0.75, relheight=0.065, anchor="n")
+
+lower_frame = tk.Frame(root, bg="black", bd=0.5)
+lower_frame.place(relx=0.5, rely=0.85, relwidth=0.75, relheight=0.065, anchor="n")
+
+
+title_label = tk.Label(upper_frame, text="You have woken the magic 8 ball and its infinite wisdom, Ask me anything!",
+                       font=50, bg="black", fg="#19cc19")
+title_label.place(relwidth=1, relheight=1)
+
+label = tk.Label(mid_frame, textvariable=var, fg="#19cc19", bg="black", font=50)
+label.place(relwidth=1, relheight=1)
+
+entry = tk.Entry(lower_frame, bg="black", fg="#19cc19", font=40)
+entry.place(relx=0.0, rely=0.1, relwidth=0.685, relheight=0.85)
+
+answer_label = tk.Label(textvariable=answer_var, fg="#19cc19", bg="black", font=65)
+answer_label.place(rely=0.275, relwidth=1, relheight=0.075)
+
+processing_label = tk.Label(textvariable=processing_var, fg="#19cc19", bg="black", font=50, anchor="w")
+processing_label.place(relx=0.15, rely=0.7, relwidth=0.2, relheight=0.08)
+
+button = tk.Button(lower_frame, text="Enter", bg="grey", font=50, command=lambda: [UserName(name=entry.get(),
+                                                    question=entry.get(), continue_or_not=entry.get()), del_entry()])
+button.place(relx=0.7, rely=0.1, relwidth=0.3, relheight=0.85)
+
+
+
+with open('Responses', 'r') as res:
+    res_contents = json.load(res)
+corrupted = IntVar()
+check_box = Checkbutton(root, text="Corrupted Ball", bg="black", fg="#19cc19", font=67, variable=corrupted)
+check_box.place(relx=0.6, rely=0.92, relwidth=0.3, relheight=0.03)
+
+
+class UserInput(object):
+    def __init__(self, name, question, continue_or_not):
+        self.name = name
+        self.question = question
+        self.continue_or_not = continue_or_not
+
+
+
+
+
+class UserName(UserInput):
+    def __init__(self, name, question, continue_or_not):
+        super().__init__(name, question, continue_or_not)
+
+
+        if self.name.isalpha():
+            var.set("What is your question " + str(self.name) + "?")
+            button_change()
+            print(name)
+        elif self.name != str():
+            var.set("Ok Elon give me a real name!")
+
+        elif self.name == "":
+            var.set("Come on I need something!")
+
+
+class UserQuestion(UserInput):
+    def __init__(self, name, question, continue_or_not):
+        super().__init__(name, question, continue_or_not)
+
+        if self.question:
+            var.set("")
+            processing()
+            print(question)
+
+
+        else:
+            var.set("I need a question " + str(name))
+
+
+
+
+def processing():
+    processing_var.set("Processing")
+    processing_label.after(425, processing_1)
+
+
+def processing_1():
+    processing_var.set("Processing.")
+    processing_label.after(425, processing_2)
+
+
+def processing_2():
+    processing_var.set("Processing..")
+    processing_label.after(425, processing_3)
+
+
+def processing_3():
+    processing_var.set("Processing...")
+    processing_label.after(425, processing_4)
+
+
+def processing_4():
+    processing_var.set("Processing.")
+    processing_label.after(425, processing_5)
+
+
+def processing_5():
+    processing_var.set("Processing..")
+    processing_label.after(425, processing_6)
+
+
+def processing_6():
+    processing_var.set("Processing...")
+    processing_label.after(425, processing_7)
+
+
+def processing_7():
+    processing_var.set("Processing.")
+    processing_label.after(425, processing_8)
+
+
+def processing_8():
+    processing_var.set("Processing..")
+    processing_label.after(425, processing_9)
+
+
+def processing_9():
+    processing_var.set("Processing...")
+    processing_label.after(425, process_comp)
+
+
+def process_comp():
+    if corrupted == 0:
+        processing_var.set("")
+        var.set("The answer to your question is:")
+        answer_var.set(random.choice(res_contents["regular"]))
+        label.after(6500, answer)
+    else:
+        processing_var.set("")
+        var.set("The answer to your question is:")
+        answer_var.set(random.choice(res_contents["corrupted"]))
+        label.after(6500, answer)
+
+def answer():
+    answer_var.set("")
+    second_button_change()
+    var.set("Would you like to ask another question?")
+
+
+
+class UserContinue(UserInput):
+    def __init__(self, name, question, continue_or_not):
+        super().__init__(name, question, continue_or_not)
+        print(continue_or_not)
+
+
+        if self.continue_or_not == "yes" or self.continue_or_not == "Yes":
+            var.set("What is your next question?")
+            button_change()
+
+        elif self.continue_or_not == "y":
+            var.set("What is your next question?")
+            button_change()
+
+
+        elif self.continue_or_not == "no":
+            var.set("Would someone else like to ask a question")
+            third_button_change()
+
+
+        elif self.continue_or_not == "n":
+            var.set("Would someone else like to ask a question")
+            third_button_change()
+
+        else:
+            pass
+
+
+
+class UserContinue2(UserInput):
+    def __init__(self, name, question, continue_or_not):
+        super().__init__(name, question, continue_or_not)
+        print(continue_or_not)
+
+        if self.continue_or_not == "yes":
+            var.set("what is your name")
+            button_reset()
+            print(continue_or_not)
+        elif self.continue_or_not == "y":
+            var.set("what is your name")
+            button_reset()
+        elif self.continue_or_not == "no":
+            exit()
+        elif self.continue_or_not == "n":
+            exit()
+        else:
+            pass
+
+
+def del_entry():
+    entry.delete(0, END)
+
+
+def button_change():
+    button.configure(command=lambda: [UserQuestion(name=entry.get(), question=entry.get(), continue_or_not=
+    entry.get()), del_entry()])
+
+
+def second_button_change():
+    button.configure(command=lambda: [UserContinue(name=entry.get(), question=entry.get(), continue_or_not=
+    entry.get()), del_entry()])
+
+
+def third_button_change():
+    button.configure(command=lambda: [UserContinue2(name=entry.get(), question=entry.get(), continue_or_not=
+    entry.get()), del_entry()])
+
+
+def button_reset():
+    button.configure(command = lambda: [UserName(name=entry.get(), question=entry
+    .get(), continue_or_not=entry.get()), del_entry()])
+
+
+root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
