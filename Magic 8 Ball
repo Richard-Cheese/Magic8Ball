@@ -78,7 +78,7 @@ class UserName(UserInput):
         if self.name.isalpha():
             var.set("What is your question " + str(self.name) + "?")
             button_change()
-            print(name)
+           
         elif self.name != str():
             var.set("Ok Elon give me a real name!")
 
@@ -93,7 +93,7 @@ class UserQuestion(UserInput):
         if self.question:
             var.set("")
             processing()
-            print(question)
+           
 
 
         else:
@@ -208,7 +208,7 @@ class UserContinue2(UserInput):
         if self.continue_or_not == "yes":
             var.set("what is your name")
             button_reset()
-            print(continue_or_not)
+            
         elif self.continue_or_not == "y":
             var.set("what is your name")
             button_reset()
